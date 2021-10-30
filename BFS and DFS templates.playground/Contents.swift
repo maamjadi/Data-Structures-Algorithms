@@ -37,14 +37,14 @@ print(resolveBFS(simpleRoot).debugDescription, "BFS")
 /// When we want to go deep. thinking that the data we're looking for lives deep down the binary tree
 func resolveDFS(_ tree: SimpleTree) -> [Int] {
 
-    var stackResult = [Int]()
+    var result = [Int]()
     var stackTree = [tree]
 
     while !stackTree.isEmpty {
 
         let current = stackTree.popLast() // remove the last one added, O(1)
-        guard let currentUnwrap = current else {return stackResult}
-        stackResult.append(currentUnwrap.value) // process node
+        guard let currentUnwrap = current else { return result }
+        result.append(currentUnwrap.value) // process node
         if let children = currentUnwrap.children {
             for tree in children {
                 stackTree.append(tree)
@@ -52,7 +52,7 @@ func resolveDFS(_ tree: SimpleTree) -> [Int] {
         }
     }
 
-    return stackResult
+    return result
 }
 
 print(resolveDFS(simpleRoot).debugDescription, "DFS")

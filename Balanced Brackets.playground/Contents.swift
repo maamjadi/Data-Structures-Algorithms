@@ -1,13 +1,3 @@
-import Foundation
-
-//https://www.hackerrank.com/challenges/balanced-brackets/problem
-
-enum BalanceCases: String {
-    case yes, no
-
-    var value: String { return self.rawValue.uppercased() }
-}
-
 enum SpecialCharacters: String {
     case brackets = "["
     case parenthesis = "("
@@ -26,57 +16,51 @@ enum SpecialCharacters: String {
         }
     }
 
-    static func isClosingString(for value: String.Element) -> Bool {
+    static func isClosing(element value: String.Element) -> Bool {
         return value == "]" || value == ")" || value == "}"
     }
 }
 
 // Complete the isBalanced function below.
-func isBalanced(s: String) -> String {
-    var isBalanced: BalanceCases = .yes
-    var baracketBalanceDic = [SpecialCharacters: Int]()
+func isBalanced(_ value: String) -> Bool {
+    var mutableValue = value
+    var specialCharacterDictionary = [SpecialCharacters: Int]()
     var openedCharacterStack = [SpecialCharacters]()
 
-    for character in s {
+    while !mutableValue.isEmpty {
+        let character = mutableValue.removeFirst()
         let specialCharacter = SpecialCharacters(sign: character)
-        guard specialCharacter != .none else { return BalanceCases.no.value }
+        let isClosingCharacter = SpecialCharacters.isClosing(element: character)
 
-        let isClosingString = SpecialCharacters.isClosingString(for: character)
-
-        if let repeatedNumber = baracketBalanceDic[specialCharacter] {
-            baracketBalanceDic[specialCharacter] = repeatedNumber + (isClosingString ? -1 : 1)
+        if let dictCount = specialCharacterDictionary[specialCharacter] {
+            specialCharacterDictionary[specialCharacter] = dictCount + (isClosingCharacter ? -1 : 1)
+        } else if isClosingCharacter {
+            return false
         } else {
-            baracketBalanceDic[specialCharacter] = 1
+            specialCharacterDictionary[specialCharacter] = 1
         }
 
-        if baracketBalanceDic[specialCharacter]! < 0 || (isClosingString && (openedCharacterStack.last ?? specialCharacter != specialCharacter)) { return BalanceCases.no.value }
+        if specialCharacterDictionary[specialCharacter]! < 0 {
+            return false
+        }
 
-        if isClosingString {
+        if isClosingCharacter {
             openedCharacterStack.removeLast()
         } else {
             openedCharacterStack.append(specialCharacter)
         }
     }
 
-    for value in baracketBalanceDic.values where value != 0 {
-        isBalanced = .no
-    }
-    
-    return isBalanced.value
+    return openedCharacterStack.isEmpty
 }
 
-let stdout = ProcessInfo.processInfo.environment["OUTPUT_PATH"]!
-FileManager.default.createFile(atPath: stdout, contents: nil, attributes: nil)
-let fileHandle = FileHandle(forWritingAtPath: stdout)!
 
-guard let t = Int((readLine()?.trimmingCharacters(in: .whitespacesAndNewlines))!)
-    else { fatalError("Bad input") }
+let sampleString = "()[{]}" //true
+let sampleString1 = "())([{]}" //false
+let sampleString2 = "()[{()[{{}}]}]" //true
+let sampleString3 = "(){([{{]}))}" //false
 
-for tItr in 1...t {
-    guard let s = readLine() else { fatalError("Bad input") }
-
-    let result = isBalanced(s: s)
-
-    fileHandle.write(result.data(using: .utf8)!)
-    fileHandle.write("\n".data(using: .utf8)!)
-}
+print(isBalanced(sampleString))
+print(isBalanced(sampleString1))
+print(isBalanced(sampleString2))
+print(isBalanced(sampleString3))
