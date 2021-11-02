@@ -230,10 +230,6 @@ private func isOneEditReplace(value: String, checkValue: String) -> Bool {
 func oneWay(value: String, checkValue: String) -> Bool {
     let difference = value.count - checkValue.count
 
-    guard abs(difference) <= 1 else {
-        return false
-    }
-
     if difference == 0 {
         return isOneEditReplace(value: value, checkValue: checkValue)
     } else if difference < 0 {

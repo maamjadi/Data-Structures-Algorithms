@@ -60,5 +60,3 @@ func getAveragePerDepth(for node: Node) -> [Int: Int] {
 }
 
 getAveragePerDepth(for: root)
-
-
