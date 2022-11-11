@@ -110,7 +110,7 @@ func isReversedFound2(for value: String, checkValue: String) -> Bool {
         stack.append(character)
     }
     for character in Array(checkValue) {
-        let last = stack.removeLast()
+        let last = stack.popLast()
         if last != character {
             return false
         }

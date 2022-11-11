@@ -33,7 +33,6 @@
 
 func matchingPairs(s: String, t: String) -> Int {
     var mismatchElements = [Int]()
-    var output = 0
 
     let arrayS = Array(s)
     let arrayT = Array(t)
